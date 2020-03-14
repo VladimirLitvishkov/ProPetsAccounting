@@ -63,7 +63,7 @@ public class AuthenticationFiltre implements Filter {
 	}
 	
 	private boolean checkPointCut(String path, String method) {
-		boolean check = path.matches("/account/\\w*/v1/login") && "Post".equalsIgnoreCase(method);
+		boolean check = path.matches("/\\w*/v1/login") && "Post".equalsIgnoreCase(method);
 		return check;
 	}
 	
