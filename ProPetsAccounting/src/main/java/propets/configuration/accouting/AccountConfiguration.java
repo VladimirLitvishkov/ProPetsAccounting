@@ -5,6 +5,7 @@ import java.util.Base64;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jmx.export.annotation.ManagedAttribute;
 import org.springframework.jmx.export.annotation.ManagedResource;
@@ -13,6 +14,7 @@ import propets.exceptions.accouting.UserAuthenticationException;
 
 @Configuration
 @ManagedResource
+@RefreshScope
 public class AccountConfiguration {
 	
 	@Value(value = "${secret}")
