@@ -53,6 +53,10 @@ public class AuthFilter implements Filter {
 			Jws<Claims> claims = null;
 			try {
 				claims = Jwts.parser().setSigningKey(configuration.getSecretKey().getBytes("UTF-8")).parseClaimsJws(xToken);
+				if (claims == null) {
+					response.sendError(401);
+					return;
+				}
 			} catch (Exception e) {
 				response.sendError(401);
 			}
