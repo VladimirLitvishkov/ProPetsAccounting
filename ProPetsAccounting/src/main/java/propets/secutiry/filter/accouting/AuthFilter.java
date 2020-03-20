@@ -38,6 +38,7 @@ public class AuthFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
 			throws IOException, ServletException {
+		System.out.println("Account: "+configuration.getSecretKey());
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) resp;
 		String path = request.getServletPath();
@@ -71,9 +72,6 @@ public class AuthFilter implements Filter {
 			return;
 			
 		}
-//		if (path.matches("/account/\\w*/v1")) {
-//			response.addHeader("X-home", request.getHeader("host"));
-//		}
 		chain.doFilter(request, response);
 
 	}
