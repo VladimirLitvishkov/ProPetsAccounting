@@ -53,10 +53,6 @@ public class AuthFilter implements Filter {
 			Jws<Claims> claims = null;
 			try {
 				claims = Jwts.parser().setSigningKey(configuration.getSecretKey().getBytes("UTF-8")).parseClaimsJws(xToken);
-				if (claims == null) {
-					response.sendError(401);
-					return;
-				}
 			} catch (Exception e) {
 				response.sendError(401);
 			}
@@ -71,7 +67,8 @@ public class AuthFilter implements Filter {
 				return;
 			}
 			String newXToken = Jwts.builder().addClaims(claims.getBody())
-					.setExpiration(Date.from(ZonedDateTime.now().plusDays(configuration.getExpPeriod()).toInstant()))
+//					.setExpiration(Date.from(ZonedDateTime.now().plusDays(configuration.getExpPeriod()).toInstant()))
+					.setExpiration(new Date(System.currentTimeMillis()+configuration.getExpPeriod()))
 					.signWith(SignatureAlgorithm.HS256, configuration.getSecretKey().getBytes("UTF-8")).compact();
 			response.addHeader("X-token", newXToken);
 			chain.doFilter(new WrapperRequest(request, user.getEmail()), response);

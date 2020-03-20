@@ -48,7 +48,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 		String newXToken = null;
 		try {
 			newXToken = Jwts.builder().setSubject("User")
-					.setExpiration(Date.from(ZonedDateTime.now().plusDays(configuration.getExpPeriod()).toInstant()))
+					.setExpiration(new Date(System.currentTimeMillis()+configuration.getExpPeriod()))
 					.claim("userId", user.getEmail())
 					.claim("userName", user.getName()).claim("password", user.getPassword()).claim("avatar", user.getImageURL())
 					.signWith(SignatureAlgorithm.HS256, configuration.getSecretKey().getBytes("UTF-8")).compact();
@@ -80,7 +80,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 		String newXToken = null;
 		try {
 			newXToken = Jwts.builder().setSubject("User")
-					.setExpiration(Date.from(ZonedDateTime.now().plusDays(configuration.getExpPeriod()).toInstant()))
+					.setExpiration(new Date(System.currentTimeMillis()+configuration.getExpPeriod()))
 					.claim("userId", user.getEmail())
 					.claim("userName", user.getName()).claim("password", user.getPassword()).claim("avatar", user.getImageURL())
 					.signWith(SignatureAlgorithm.HS256, configuration.getSecretKey().getBytes("UTF-8")).compact();
@@ -169,7 +169,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 				return null;
 			}
 			newXToken = Jwts.builder().addClaims(claims.getBody())
-					.setExpiration(Date.from(ZonedDateTime.now().plusDays(configuration.getExpPeriod()).toInstant()))
+					.setExpiration(new Date(System.currentTimeMillis()+configuration.getExpPeriod()))
 					.signWith(SignatureAlgorithm.HS256, configuration.getSecretKey().getBytes("UTF-8")).compact();
 		} catch (Exception e) {
 			return new ResponseEntity<String>(HttpStatus.CONFLICT);
