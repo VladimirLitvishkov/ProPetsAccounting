@@ -1,8 +1,6 @@
 package propets.configuration.accouting;
 
-import java.time.ZonedDateTime;
 import java.util.Base64;
-import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -55,9 +53,9 @@ public class AccountConfiguration {
 		}
 	}
 
-	public Date getExpDate() {
-		return Date.from(ZonedDateTime.now().plusDays(expPeriod).toInstant());
-	}
+//	public Date getExpDate() {
+//		return Date.from(ZonedDateTime.now().plusDays(expPeriod).toInstant());
+//	}
 	
 	
 

@@ -2,6 +2,7 @@ package propets.secutiry.filter.accouting;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.time.ZonedDateTime;
 import java.util.Date;
 
 import javax.servlet.Filter;
@@ -65,7 +66,8 @@ public class AuthFilter implements Filter {
 				response.sendError(401);
 				return;
 			}
-			String newXToken = Jwts.builder().addClaims(claims.getBody()).setExpiration(configuration.getExpDate())
+			String newXToken = Jwts.builder().addClaims(claims.getBody())
+					.setExpiration(Date.from(ZonedDateTime.now().plusDays(configuration.getExpPeriod()).toInstant()))
 					.signWith(SignatureAlgorithm.HS256, configuration.getSecretKey().getBytes("UTF-8")).compact();
 			response.addHeader("X-token", newXToken);
 			chain.doFilter(new WrapperRequest(request, user.getEmail()), response);

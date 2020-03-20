@@ -1,6 +1,7 @@
 package propets.service.accouting;
 
 import java.io.UnsupportedEncodingException;
+import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.Set;
 
@@ -46,7 +47,9 @@ public class UserAccountServiceImpl implements UserAccountService {
 
 		String newXToken = null;
 		try {
-			newXToken = Jwts.builder().setSubject("User").setExpiration(configuration.getExpDate()).claim("userId", user.getEmail())
+			newXToken = Jwts.builder().setSubject("User")
+					.setExpiration(Date.from(ZonedDateTime.now().plusDays(configuration.getExpPeriod()).toInstant()))
+					.claim("userId", user.getEmail())
 					.claim("userName", user.getName()).claim("password", user.getPassword()).claim("avatar", user.getImageURL())
 					.signWith(SignatureAlgorithm.HS256, configuration.getSecretKey().getBytes("UTF-8")).compact();
 		} catch (UnsupportedEncodingException e) {
@@ -76,7 +79,9 @@ public class UserAccountServiceImpl implements UserAccountService {
 		User user = userAccountRepository.findById(login).get();
 		String newXToken = null;
 		try {
-			newXToken = Jwts.builder().setSubject("User").setExpiration(configuration.getExpDate()).claim("userId", user.getEmail())
+			newXToken = Jwts.builder().setSubject("User")
+					.setExpiration(Date.from(ZonedDateTime.now().plusDays(configuration.getExpPeriod()).toInstant()))
+					.claim("userId", user.getEmail())
 					.claim("userName", user.getName()).claim("password", user.getPassword()).claim("avatar", user.getImageURL())
 					.signWith(SignatureAlgorithm.HS256, configuration.getSecretKey().getBytes("UTF-8")).compact();
 		} catch (UnsupportedEncodingException e) {
@@ -163,7 +168,8 @@ public class UserAccountServiceImpl implements UserAccountService {
 			if (user == null) {
 				return null;
 			}
-			newXToken = Jwts.builder().addClaims(claims.getBody()).setExpiration(configuration.getExpDate())
+			newXToken = Jwts.builder().addClaims(claims.getBody())
+					.setExpiration(Date.from(ZonedDateTime.now().plusDays(configuration.getExpPeriod()).toInstant()))
 					.signWith(SignatureAlgorithm.HS256, configuration.getSecretKey().getBytes("UTF-8")).compact();
 		} catch (Exception e) {
 			return new ResponseEntity<String>(HttpStatus.CONFLICT);
