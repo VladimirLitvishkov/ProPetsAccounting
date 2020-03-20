@@ -39,7 +39,6 @@ public class AuthFilter implements Filter {
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain)
 			throws IOException, ServletException {
-		System.out.println("Account: "+configuration.getSecretKey());
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) resp;
 		String path = request.getServletPath();
@@ -56,10 +55,10 @@ public class AuthFilter implements Filter {
 			} catch (Exception e) {
 				response.sendError(401);
 			}
-			if (claims.getBody().getExpiration().before(new Date(System.currentTimeMillis()))) {
-				response.sendError(401);
-				return;
-			}
+//			if (claims.getBody().getExpiration().before(new Date(System.currentTimeMillis()))) {
+//				response.sendError(401);
+//				return;
+//			}
 			String userId = (String) claims.getBody().get("userId");
 			User user = repository.findById(userId).orElse(null);
 			if (user == null) {

@@ -59,6 +59,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 		}
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("X-token", newXToken);
+		headers.add("X-period", Long.toString(configuration.getExpPeriod()));
 		ResponseEntity<UserRegRespDto> response = new ResponseEntity<UserRegRespDto>(buildUserRegRespDto(user), headers,
 				HttpStatus.OK);
 		return response;
