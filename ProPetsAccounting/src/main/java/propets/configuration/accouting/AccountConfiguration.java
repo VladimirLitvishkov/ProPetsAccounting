@@ -15,7 +15,7 @@ import propets.exceptions.accouting.UserAuthenticationException;
 @RefreshScope
 public class AccountConfiguration {
 	
-	@Value(value = "${secret}")
+	@Value("${secret}")
 	String secretKey;
 	
 	@ManagedAttribute
