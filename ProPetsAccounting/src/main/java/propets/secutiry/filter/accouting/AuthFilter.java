@@ -75,7 +75,8 @@ public class AuthFilter implements Filter {
 
 	private boolean checkPointCut(String path, String method) {
 		boolean check = ((path.matches("/\\w*/v1") || path.matches("/\\w*/v1/login")) 
-				&& "Post".equalsIgnoreCase(method)) 
+				&& "Post".equalsIgnoreCase(method))
+				|| "Options".equalsIgnoreCase(method)
 				|| path.startsWith("/h2") || path.matches("/\\w*/v1/check");
 		return check;
 	}
