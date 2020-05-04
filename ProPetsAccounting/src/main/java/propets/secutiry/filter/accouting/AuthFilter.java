@@ -44,7 +44,6 @@ public class AuthFilter implements Filter {
 		String path = request.getServletPath();
 		String method = request.getMethod();
 		String xToken = request.getHeader("X-token");
-		response.addHeader("Access-Control-Allow-Origin", "*");
 		if (!checkPointCut(path, method)) {
 			if (xToken == null) {
 				response.sendError(401);
