@@ -67,7 +67,6 @@ public class AuthFilter implements Filter {
 			}
 			String newXToken = Jwts.builder().addClaims(claims.getBody())
 					.setExpiration(Date.from(ZonedDateTime.now().plusDays(configuration.getExpPeriod()).toInstant()))
-//					.setExpiration(new Date(System.currentTimeMillis()+configuration.getExpPeriod()))
 					.signWith(SignatureAlgorithm.HS256, configuration.getSecretKey().getBytes("UTF-8")).compact();
 			response.addHeader("X-token", newXToken);
 			chain.doFilter(new WrapperRequest(request, user.getEmail()), response);

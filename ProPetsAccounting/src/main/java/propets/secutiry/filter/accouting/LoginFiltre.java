@@ -23,7 +23,7 @@ import propets.dao.accouting.UserAccountRepository;
 import propets.model.accouting.User;
 @Service
 @Order(10)
-public class AuthenticationFiltre implements Filter {
+public class LoginFiltre implements Filter {
 	
 	@Autowired
 	AccountConfiguration configuration;

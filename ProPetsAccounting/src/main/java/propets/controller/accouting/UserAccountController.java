@@ -5,6 +5,7 @@ import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +23,7 @@ import propets.dto.accouting.UserRegRespDto;
 import propets.dto.accouting.UserRegisterDto;
 import propets.service.accouting.UserAccountService;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/{lang}/v1")
 public class UserAccountController {

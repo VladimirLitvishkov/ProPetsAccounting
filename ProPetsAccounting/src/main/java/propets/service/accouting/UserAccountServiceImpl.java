@@ -45,24 +45,29 @@ public class UserAccountServiceImpl implements UserAccountService {
 				.build();
 		userAccountRepository.save(user);
 
-		String newXToken = null;
+		String newXToken = buildXToken(user);
+		if (newXToken == null) {
+			return null;
+		}
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("X-token", newXToken);
+		ResponseEntity<UserRegRespDto> response = new ResponseEntity<UserRegRespDto>(buildUserRegRespDto(user), headers, 
+				HttpStatus.OK);
+		return response;
+	}
+
+	private String buildXToken(User user) {
+		String token = null;
 		try {
-			newXToken = Jwts.builder().setSubject("User")
-//					.setExpiration(new Date(System.currentTimeMillis()+configuration.getExpPeriod()))
+			return token = Jwts.builder().setSubject("User")
 					.setExpiration(Date.from(ZonedDateTime.now().plusDays(configuration.getExpPeriod()).toInstant()))
 					.claim("userId", user.getEmail())
 					.claim("userName", user.getName()).claim("password", user.getPassword()).claim("avatar", user.getImageURL())
 					.signWith(SignatureAlgorithm.HS256, configuration.getSecretKey().getBytes("UTF-8")).compact();
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
-			return null;
+			return token;
 		}
-		HttpHeaders headers = new HttpHeaders();
-		headers.add("X-token", newXToken);
-		headers.add("X-period", Long.toString(configuration.getExpPeriod()));
-		ResponseEntity<UserRegRespDto> response = new ResponseEntity<UserRegRespDto>(buildUserRegRespDto(user), headers,
-				HttpStatus.OK);
-		return response;
 	}
 
 	private UserRegRespDto buildUserRegRespDto(User user) {
@@ -79,18 +84,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 	@Override
 	public ResponseEntity<UserProfileDto> login(String login) {
 		User user = userAccountRepository.findById(login).get();
-		String newXToken = null;
-		try {
-			newXToken = Jwts.builder().setSubject("User")
-//					.setExpiration(new Date(System.currentTimeMillis()+configuration.getExpPeriod()))
-					.setExpiration(Date.from(ZonedDateTime.now().plusDays(configuration.getExpPeriod()).toInstant()))
-					.claim("userId", user.getEmail())
-					.claim("userName", user.getName()).claim("password", user.getPassword()).claim("avatar", user.getImageURL())
-					.signWith(SignatureAlgorithm.HS256, configuration.getSecretKey().getBytes("UTF-8")).compact();
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-			return null;
-		}
+		String newXToken = buildXToken(user);
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("X-token", newXToken);
 		ResponseEntity<UserProfileDto> response = new ResponseEntity<UserProfileDto>(
@@ -163,17 +157,10 @@ public class UserAccountServiceImpl implements UserAccountService {
 		User user = null;
 		try {
 			Jws<Claims> claims = Jwts.parser().setSigningKey(configuration.getSecretKey().getBytes("UTF-8")).parseClaimsJws(xToken);
-			if (claims.getBody().getExpiration().before(new Date(System.currentTimeMillis()))) {
-				return null;
-			}
 			String userId = (String) claims.getBody().get("userId");
-			user = userAccountRepository.findById(userId).orElse(null);
-			if (user == null) {
-				return null;
-			}
+			user = userAccountRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 			newXToken = Jwts.builder().addClaims(claims.getBody())
 					.setExpiration(Date.from(ZonedDateTime.now().plusDays(configuration.getExpPeriod()).toInstant()))
-//					.setExpiration(new Date(System.currentTimeMillis()+configuration.getExpPeriod()))
 					.signWith(SignatureAlgorithm.HS256, configuration.getSecretKey().getBytes("UTF-8")).compact();
 		} catch (Exception e) {
 			return new ResponseEntity<String>(HttpStatus.CONFLICT);
