@@ -55,10 +55,6 @@ public class AuthFilter implements Filter {
 			} catch (Exception e) {
 				response.sendError(401);
 			}
-//			if (claims.getBody().getExpiration().before(new Date(System.currentTimeMillis()))) {
-//				response.sendError(401);
-//				return;
-//			}
 			String userId = (String) claims.getBody().get("userId");
 			User user = repository.findById(userId).orElse(null);
 			if (user == null) {

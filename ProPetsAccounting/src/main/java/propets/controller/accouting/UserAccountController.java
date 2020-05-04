@@ -23,9 +23,10 @@ import propets.dto.accouting.UserRegRespDto;
 import propets.dto.accouting.UserRegisterDto;
 import propets.service.accouting.UserAccountService;
 
-@CrossOrigin
+
 @RestController
 @RequestMapping("/{lang}/v1")
+@CrossOrigin(origins = "*")
 public class UserAccountController {
 
 	@Autowired
@@ -65,7 +66,7 @@ public class UserAccountController {
 	public UserBlockDto blockAccount(@PathVariable String login, @PathVariable boolean status) {
 		return userAccountService.blockAccount(login, status);
 	}
-
+	
 	@GetMapping("/{login:.*}/info")
 	public UserProfileDto findUserByID(@PathVariable String login) {
 		return userAccountService.findUserByID(login);
