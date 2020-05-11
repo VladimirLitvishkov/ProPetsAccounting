@@ -26,7 +26,7 @@ import propets.service.accouting.UserAccountService;
 
 @RestController
 @RequestMapping("/{lang}/v1")
-@CrossOrigin(origins = "*", allowedHeaders = "X-token")
+@CrossOrigin(origins = "*", exposedHeaders = "X-token")
 public class UserAccountController {
 
 	@Autowired
