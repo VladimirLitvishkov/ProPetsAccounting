@@ -77,7 +77,7 @@ public class AuthFilter implements Filter {
 		boolean check = ((path.matches("/\\w*/v1") || path.matches("/\\w*/v1/login")) 
 				&& "Post".equalsIgnoreCase(method))
 				|| "Options".equalsIgnoreCase(method)
-				|| path.startsWith("/h2") || path.matches("/\\w*/v1/check");
+				|| path.matches("/\\w*/v1/check");
 		return check;
 	}
 	

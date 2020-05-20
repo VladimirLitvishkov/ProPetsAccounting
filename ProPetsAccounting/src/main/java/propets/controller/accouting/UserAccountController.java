@@ -23,7 +23,6 @@ import propets.dto.accouting.UserRegRespDto;
 import propets.dto.accouting.UserRegisterDto;
 import propets.service.accouting.UserAccountService;
 
-
 @RestController
 @RequestMapping("/{lang}/v1")
 @CrossOrigin(origins = "*", exposedHeaders = "X-token")
@@ -66,26 +65,29 @@ public class UserAccountController {
 	public UserBlockDto blockAccount(@PathVariable String login, @PathVariable boolean status) {
 		return userAccountService.blockAccount(login, status);
 	}
-	
+
 	@GetMapping("/{login:.*}/info")
 	public UserProfileDto findUserByID(@PathVariable String login) {
 		return userAccountService.findUserByID(login);
 	}
-	
+
 	@GetMapping("/check")
-	public ResponseEntity<String> checkXToken(@RequestHeader("X-token") String xToken){
+	public ResponseEntity<String> checkXToken(@RequestHeader("X-token") String xToken) {
 		return userAccountService.checkXToken(xToken);
 	}
+
 	@PostMapping("/favorite/{id}")
-	public Set<String> addFavorite(String postId, Principal principal){
+	public Set<String> addFavorite(String postId, Principal principal) {
 		return userAccountService.addFavorite(postId, principal.getName());
 	}
+
 	@DeleteMapping("/favorite/{id}")
-	public Set<String> removeFavorite(String postId, Principal principal){
+	public Set<String> removeFavorite(String postId, Principal principal) {
 		return userAccountService.removeFavorite(postId, principal.getName());
 	}
+
 	@GetMapping("/favorites")
-	public Set<String> getFavorites(Principal principal){
+	public Set<String> getFavorites(Principal principal) {
 		return userAccountService.getFavorites(principal.getName());
 	}
 

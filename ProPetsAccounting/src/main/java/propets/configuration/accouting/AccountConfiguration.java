@@ -5,41 +5,42 @@ import java.util.Base64;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jmx.export.annotation.ManagedAttribute;
-import org.springframework.jmx.export.annotation.ManagedResource;
 
+import lombok.Getter;
+import lombok.Setter;
 import propets.exceptions.accouting.UserAuthenticationException;
 
 @Configuration
-@ManagedResource
 @RefreshScope
+@Getter
+@Setter
 public class AccountConfiguration {
-	
+
 	@Value("${secret}")
 	String secretKey;
-	
-	@ManagedAttribute
-	public String getSecretKey() {
-		return secretKey;
-	}
-	
-	@ManagedAttribute
-	public void setSecretKey(String secretKey) {
-		this.secretKey = secretKey;
-	}
-	
+
+//	@ManagedAttribute
+//	public String getSecretKey() {
+//		return secretKey;
+//	}
+//	
+//	@ManagedAttribute
+//	public void setSecretKey(String secretKey) {
+//		this.secretKey = secretKey;
+//	}
+
 	@Value("${exp.value}")
 	long expPeriod;
 
-	@ManagedAttribute
-	public long getExpPeriod() {
-		return expPeriod;
-	}
-
-	@ManagedAttribute
-	public void setExpPeriod(long expPeriod) {
-		this.expPeriod = expPeriod;
-	}
+//	@ManagedAttribute
+//	public long getExpPeriod() {
+//		return expPeriod;
+//	}
+//
+//	@ManagedAttribute
+//	public void setExpPeriod(long expPeriod) {
+//		this.expPeriod = expPeriod;
+//	}
 
 	public UserAccountCredentials tokenDecode(String token) {
 		try {
@@ -56,7 +57,5 @@ public class AccountConfiguration {
 //	public Date getExpDate() {
 //		return Date.from(ZonedDateTime.now().plusDays(expPeriod).toInstant());
 //	}
-	
-	
 
 }
