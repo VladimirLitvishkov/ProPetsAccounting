@@ -1,6 +1,7 @@
 package propets.controller.accouting;
 
 import java.security.Principal;
+import java.util.HashMap;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class UserAccountController {
 	@Autowired
 	UserAccountService userAccountService;
 
-	@PostMapping
+	@PostMapping("/registration")
 	public ResponseEntity<UserRegRespDto> userRegistration(@RequestBody UserRegisterDto user) {
 		return userAccountService.userRegistration(user);
 	}
@@ -41,17 +42,17 @@ public class UserAccountController {
 		return userAccountService.login(principal.getName());
 	}
 
-	@PutMapping("/{login}")
-	public UserProfileDto editUser(Principal principal, @RequestBody UserEditDto userEditDto) {
-		return userAccountService.editUser(principal.getName(), userEditDto);
+	@PutMapping("/{login:.*}")
+	public UserProfileDto editUser(@PathVariable String login, @RequestBody UserEditDto userEditDto) {
+		return userAccountService.editUser(login, userEditDto);
 	}
 
-	@DeleteMapping("/{login}")
-	public UserProfileDto removeUser(Principal principal) {
-		return userAccountService.removeUser(principal.getName());
+	@DeleteMapping("/{login:.*}")
+	public UserProfileDto removeUser(@PathVariable String login) {
+		return userAccountService.removeUser(login);
 	}
 
-	@PostMapping("/{login:.*}/role/{role}")
+	@PutMapping("/{login:.*}/role/{role}")
 	public Set<String> addRole(@PathVariable String login, @PathVariable String role) {
 		return userAccountService.addRole(login, role);
 	}
@@ -76,19 +77,34 @@ public class UserAccountController {
 		return userAccountService.checkXToken(xToken);
 	}
 
-	@PostMapping("/favorite/{id}")
-	public Set<String> addFavorite(String postId, Principal principal) {
-		return userAccountService.addFavorite(postId, principal.getName());
+	@PutMapping("/{login:.*}/favorite/{postId}")
+	public boolean addFavorite(@RequestHeader("X-nameService") String nameService, @PathVariable String postId, @PathVariable String login) {
+		return userAccountService.addFavorite(nameService, postId, login);
 	}
 
-	@DeleteMapping("/favorite/{id}")
-	public Set<String> removeFavorite(String postId, Principal principal) {
-		return userAccountService.removeFavorite(postId, principal.getName());
+	@DeleteMapping("/{login:.*}/favorite/{postId}")
+	public boolean removeFavorite(@RequestHeader("X-nameService") String nameService, @PathVariable String postId, @PathVariable String login) {
+		return userAccountService.removeFavorite(nameService, postId, login);
 	}
 
-	@GetMapping("/favorites")
-	public Set<String> getFavorites(Principal principal) {
-		return userAccountService.getFavorites(principal.getName());
+	@GetMapping("/{login:.*}/favorites")
+	public HashMap<String, Set<String>> getFavorites(@PathVariable String login) {
+		return userAccountService.getFavorites(login);
+	}
+	
+	@PutMapping("/{login:.*}/activity/{postId}")
+	public boolean addActivities(@RequestHeader("X-nameService") String nameService, @PathVariable String postId, @PathVariable String login) {
+		return userAccountService.addActivities(nameService, postId, login);
+	}
+
+	@DeleteMapping("/{login:.*}/activity/{postId}")
+	public boolean removeActivities(@RequestHeader("X-nameService") String nameService, @PathVariable String postId, @PathVariable String login) {
+		return userAccountService.removeActivities(nameService, postId, login);
+	}
+
+	@GetMapping("/{login:.*}/activities")
+	public HashMap<String, Set<String>> getActivities(@PathVariable String login) {
+		return userAccountService.getActivities(login);
 	}
 
 }

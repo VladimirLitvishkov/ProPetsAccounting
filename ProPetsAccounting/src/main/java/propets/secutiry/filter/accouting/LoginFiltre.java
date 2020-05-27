@@ -63,7 +63,7 @@ public class LoginFiltre implements Filter {
 	}
 	
 	private boolean checkPointCut(String path, String method) {
-		boolean check = path.matches("/\\w*/v1/login") && "Post".equalsIgnoreCase(method);
+		boolean check = path.matches(".+/v1/login") && "Post".equalsIgnoreCase(method);
 		return check;
 	}
 	
@@ -86,21 +86,6 @@ public class LoginFiltre implements Filter {
 		}
 		
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 //	@Override
 //	public void init(FilterConfig config) {

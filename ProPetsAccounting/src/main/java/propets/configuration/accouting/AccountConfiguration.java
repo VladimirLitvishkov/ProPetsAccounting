@@ -19,28 +19,11 @@ public class AccountConfiguration {
 	@Value("${secret}")
 	String secretKey;
 
-//	@ManagedAttribute
-//	public String getSecretKey() {
-//		return secretKey;
-//	}
-//	
-//	@ManagedAttribute
-//	public void setSecretKey(String secretKey) {
-//		this.secretKey = secretKey;
-//	}
-
 	@Value("${exp.value}")
 	long expPeriod;
-
-//	@ManagedAttribute
-//	public long getExpPeriod() {
-//		return expPeriod;
-//	}
-//
-//	@ManagedAttribute
-//	public void setExpPeriod(long expPeriod) {
-//		this.expPeriod = expPeriod;
-//	}
+	
+	@Value("${requestToken}")
+	String requestToken;
 
 	public UserAccountCredentials tokenDecode(String token) {
 		try {
@@ -53,9 +36,5 @@ public class AccountConfiguration {
 			throw new UserAuthenticationException();
 		}
 	}
-
-//	public Date getExpDate() {
-//		return Date.from(ZonedDateTime.now().plusDays(expPeriod).toInstant());
-//	}
 
 }

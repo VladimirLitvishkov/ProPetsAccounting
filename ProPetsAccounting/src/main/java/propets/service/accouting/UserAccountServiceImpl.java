@@ -3,6 +3,7 @@ package propets.service.accouting;
 import java.io.UnsupportedEncodingException;
 import java.time.ZonedDateTime;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Set;
 
 import org.mindrot.jbcrypt.BCrypt;
@@ -29,9 +30,10 @@ import propets.model.accouting.User;
 
 @Service
 public class UserAccountServiceImpl implements UserAccountService {
+	
 	@Autowired
 	UserAccountRepository userAccountRepository;
-	
+
 	@Autowired
 	AccountConfiguration configuration;
 
@@ -51,7 +53,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 		}
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("X-token", newXToken);
-		ResponseEntity<UserRegRespDto> response = new ResponseEntity<UserRegRespDto>(buildUserRegRespDto(user), headers, 
+		ResponseEntity<UserRegRespDto> response = new ResponseEntity<UserRegRespDto>(buildUserRegRespDto(user), headers,
 				HttpStatus.OK);
 		return response;
 	}
@@ -61,8 +63,8 @@ public class UserAccountServiceImpl implements UserAccountService {
 		try {
 			return token = Jwts.builder().setSubject("User")
 					.setExpiration(Date.from(ZonedDateTime.now().plusDays(configuration.getExpPeriod()).toInstant()))
-					.claim("userId", user.getEmail())
-					.claim("userName", user.getName()).claim("password", user.getPassword()).claim("avatar", user.getImageURL())
+					.claim("userId", user.getEmail()).claim("userName", user.getName())
+					.claim("password", user.getPassword()).claim("avatar", user.getAvatar())
 					.signWith(SignatureAlgorithm.HS256, configuration.getSecretKey().getBytes("UTF-8")).compact();
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
@@ -72,12 +74,12 @@ public class UserAccountServiceImpl implements UserAccountService {
 
 	private UserRegRespDto buildUserRegRespDto(User user) {
 		return UserRegRespDto.builder().email(user.getEmail()).name(user.getName()).roles(user.getRoles())
-				.imageURL(user.getImageURL()).build();
+				.imageURL(user.getAvatar()).build();
 	}
 
 	private UserProfileDto buildUserProfileDto(User user) {
 		return UserProfileDto.builder().email(user.getEmail()).name(user.getName()).phone(user.getPhone())
-				.block(user.getBlock()).imageURL(user.getImageURL()).regDate(user.getRegDate()).roles(user.getRoles())
+				.block(user.getBlock()).imageURL(user.getAvatar()).regDate(user.getRegDate()).roles(user.getRoles())
 				.build();
 	}
 
@@ -87,9 +89,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 		String newXToken = buildXToken(user);
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("X-token", newXToken);
-		ResponseEntity<UserProfileDto> response = new ResponseEntity<UserProfileDto>(
-				buildUserProfileDto(userAccountRepository.findById(login).get()), headers, HttpStatus.OK);
-		return response;
+		return new ResponseEntity<UserProfileDto>(buildUserProfileDto(user), headers, HttpStatus.OK);
 	}
 
 	@Override
@@ -102,7 +102,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 			user.setPhone(userEditDto.getPhone());
 		}
 		if (userEditDto.getImageURL() != null) {
-			user.setImageURL(userEditDto.getImageURL());
+			user.setAvatar(userEditDto.getImageURL());
 		}
 		userAccountRepository.save(user);
 		return buildUserProfileDto(user);
@@ -156,7 +156,8 @@ public class UserAccountServiceImpl implements UserAccountService {
 		String newXToken = null;
 		User user = null;
 		try {
-			Jws<Claims> claims = Jwts.parser().setSigningKey(configuration.getSecretKey().getBytes("UTF-8")).parseClaimsJws(xToken);
+			Jws<Claims> claims = Jwts.parser().setSigningKey(configuration.getSecretKey().getBytes("UTF-8"))
+					.parseClaimsJws(xToken);
 			String userId = (String) claims.getBody().get("userId");
 			user = userAccountRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 			newXToken = Jwts.builder().addClaims(claims.getBody())
@@ -167,32 +168,52 @@ public class UserAccountServiceImpl implements UserAccountService {
 		}
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("X-token", newXToken);
-		headers.add("X-userName", user.getName());
 		headers.add("X-userId", user.getEmail());
-		headers.add("X-avatar", user.getImageURL());
 		return new ResponseEntity<String>(headers, HttpStatus.OK);
 	}
 
 	@Override
-	public Set<String> addFavorite(String postId, String userId) {
+	public boolean addFavorite(String nameService, String postId, String userId) {
 		User user = userAccountRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-		user.addFavorite(postId);
+		boolean result = user.addFavorite(nameService, postId);
 		userAccountRepository.save(user);
+		return result;
+	}
+
+	@Override
+	public boolean removeFavorite(String nameService, String postId, String userId) {
+		User user = userAccountRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+		boolean result = user.removeFavorite(nameService, postId);
+		userAccountRepository.save(user);
+		return result;
+	}
+
+	@Override
+	public HashMap<String, Set<String>> getFavorites(String userId) {
+		User user = userAccountRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 		return user.getFavorites();
 	}
 
 	@Override
-	public Set<String> removeFavorite(String postId, String userId) {
+	public boolean addActivities(String nameService, String postId, String userId) {
 		User user = userAccountRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-		user.removeFavorite(postId);
+		boolean result = user.addActivities(nameService, postId);
 		userAccountRepository.save(user);
-		return user.getFavorites();
+		return result;
 	}
 
 	@Override
-	public Set<String> getFavorites(String userId) {
+	public boolean removeActivities(String nameService, String postId, String userId) {
 		User user = userAccountRepository.findById(userId).orElseThrow(UserNotFoundException::new);
-		return user.getFavorites();
+		boolean result = user.removeActivities(nameService, postId);
+		userAccountRepository.save(user);
+		return result;
+	}
+
+	@Override
+	public HashMap<String, Set<String>> getActivities(String userId) {
+		User user = userAccountRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+		return user.getActivities();
 	}
 
 }

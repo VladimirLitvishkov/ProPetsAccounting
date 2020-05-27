@@ -2,13 +2,11 @@ package propets.model.accouting;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import org.springframework.data.annotation.Id;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -27,8 +25,6 @@ import lombok.Singular;
 @Setter
 @Builder
 @EqualsAndHashCode(of = { "email" })
-@Entity
-@Table(name = "users")
 public class User implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -43,13 +39,13 @@ public class User implements Serializable {
 	@Default
 	LocalDateTime regDate = LocalDateTime.now();
 	@Singular
-	@ElementCollection
 	Set<String> roles;
 	@Default
-	String imageURL = "https://www.gravatar.com/avatar/0?d=mp";
-	@ElementCollection
+	String avatar = "https://www.gravatar.com/avatar/0?d=mp";
 	@Default
-	Set<String> favorites = new HashSet<String>();
+	HashMap<String, Set<String>> favorites = new HashMap<>();
+	@Default
+	HashMap<String, Set<String>> activities = new HashMap<>();
 
 	public boolean addRole(String role) {
 		return roles.add(role);
@@ -59,12 +55,33 @@ public class User implements Serializable {
 		return roles.remove(role);
 	}
 	
-	public boolean addFavorite(String postId) {
-		return favorites.add(postId);
+	public boolean addFavorite(String key, String postId) {
+		if (favorites.containsKey(key)) {
+			return favorites.get(key).add(postId);
+		} else {
+			Set<String> set = new HashSet<>();
+			set.add(postId);
+			return favorites.put(key, set) == null;
+		}
 	}
 	
-	public boolean removeFavorite(String postId) {
-		return favorites.remove(postId);
+	public boolean removeFavorite(String key, String postId) {
+		return favorites.get(key).remove(postId);
 	}
+	
+	public boolean addActivities(String key, String postId) {
+		if (activities.containsKey(key)) {
+			return activities.get(key).add(postId);
+		} else {
+			Set<String> set = new HashSet<>();
+			set.add(postId);
+			return activities.put(key, set) == null;
+		}
+	}
+	
+	public boolean removeActivities(String key, String postId) {
+		return activities.get(key).remove(postId);
+	}
+
 
 }
