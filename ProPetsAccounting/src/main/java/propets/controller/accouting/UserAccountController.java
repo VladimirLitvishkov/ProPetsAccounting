@@ -32,7 +32,7 @@ public class UserAccountController {
 	@Autowired
 	UserAccountService userAccountService;
 
-	@PostMapping("/registration")
+	@PostMapping
 	public ResponseEntity<UserRegRespDto> userRegistration(@RequestBody UserRegisterDto user) {
 		return userAccountService.userRegistration(user);
 	}
@@ -72,7 +72,7 @@ public class UserAccountController {
 		return userAccountService.findUserByID(login);
 	}
 
-	@GetMapping("/check")
+	@GetMapping("/token/validation")
 	public ResponseEntity<String> checkXToken(@RequestHeader("X-token") String xToken) {
 		return userAccountService.checkXToken(xToken);
 	}
