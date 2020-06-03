@@ -142,6 +142,8 @@ public class AuthFilter implements Filter {
 		boolean check = ((path.matches(".+/v1/registration") || path.matches(".+/v1/login"))
 				&& "Post".equalsIgnoreCase(method))
 				|| ("Get".equalsIgnoreCase(method) && (path.endsWith("activities") || path.endsWith("favorites")))
+				|| (("Put".equalsIgnoreCase(method) || "Delete".equalsIgnoreCase(method))
+						&& path.matches(".+/v1/.+/activity/.+"))
 				|| "Options".equalsIgnoreCase(method) || path.matches(".+/v1/check");
 		return check;
 	}
@@ -153,15 +155,16 @@ public class AuthFilter implements Filter {
 			super(request);
 			this.user = user;
 		}
+
 		@Override
 		public Principal getUserPrincipal() {
 			return new Principal() { // () -> user;
-				
+
 				@Override
 				public String getName() {
 					return user;
 				}
 			};
-		}	
+		}
 	}
 }
