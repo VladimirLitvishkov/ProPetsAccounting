@@ -1,6 +1,7 @@
 package propets.secutiry.filter.accouting;
 
 import java.io.IOException;
+import java.security.Principal;
 
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -8,6 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,7 +81,9 @@ public class AuthFilter implements Filter {
 				return;
 			}
 			response.addHeader("X-token", responseCheckToken.getHeaders().getFirst("X-token"));
-			response.addHeader("X-userId", responseCheckToken.getHeaders().getFirst("X-userId"));
+			chain.doFilter(new WrapperRequest(request, responseCheckToken.getHeaders().getFirst("X-userId")), response);
+			return;
+//			response.addHeader("X-userId", responseCheckToken.getHeaders().getFirst("X-userId"));
 
 //			========================
 //			String url = configuration.getRequestToken();
@@ -142,22 +146,22 @@ public class AuthFilter implements Filter {
 		return check;
 	}
 
-//	private class WrapperRequest extends HttpServletRequestWrapper {
-//		String user;
-//
-//		public WrapperRequest(HttpServletRequest request, String user) {
-//			super(request);
-//			this.user = user;
-//		}
-//		@Override
-//		public Principal getUserPrincipal() {
-//			return new Principal() { // () -> user;
-//				
-//				@Override
-//				public String getName() {
-//					return user;
-//				}
-//			};
-//		}	
-//	}
+	private class WrapperRequest extends HttpServletRequestWrapper {
+		String user;
+
+		public WrapperRequest(HttpServletRequest request, String user) {
+			super(request);
+			this.user = user;
+		}
+		@Override
+		public Principal getUserPrincipal() {
+			return new Principal() { // () -> user;
+				
+				@Override
+				public String getName() {
+					return user;
+				}
+			};
+		}	
+	}
 }

@@ -32,7 +32,7 @@ public class AdminFilter implements Filter {
 		String path = request.getServletPath();
 		String method = request.getMethod();
 		if (checkPointCut(path, method)) {
-			String userId = response.getHeader("X-userId");
+			String userId = request.getUserPrincipal().getName();
 			User user = repository.findById(userId).get();
 			if (user == null) {
 				response.sendError(409, "You have problem");
