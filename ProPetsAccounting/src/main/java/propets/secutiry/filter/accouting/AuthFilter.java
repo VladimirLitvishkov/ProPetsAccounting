@@ -139,7 +139,7 @@ public class AuthFilter implements Filter {
 	}
 
 	private boolean checkPointCut(String path, String method) {
-		boolean check = ((path.matches(".+/v1/registration") || path.matches(".+/v1/login"))
+		boolean check = ((path.matches(".+/v1") || path.matches(".+/v1/login"))
 				&& "Post".equalsIgnoreCase(method))
 				|| ("Get".equalsIgnoreCase(method) && (path.endsWith("activities") || path.endsWith("favorites")))
 				|| (("Put".equalsIgnoreCase(method) || "Delete".equalsIgnoreCase(method))
