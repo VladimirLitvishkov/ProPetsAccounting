@@ -30,7 +30,7 @@ import propets.model.accouting.User;
 
 @Service
 public class UserAccountServiceImpl implements UserAccountService {
-	
+
 	@Autowired
 	UserAccountRepository userAccountRepository;
 
@@ -74,12 +74,12 @@ public class UserAccountServiceImpl implements UserAccountService {
 
 	private UserRegRespDto buildUserRegRespDto(User user) {
 		return UserRegRespDto.builder().email(user.getEmail()).name(user.getName()).roles(user.getRoles())
-				.imageURL(user.getAvatar()).build();
+				.phone(user.getPhone()).avatar(user.getAvatar()).build();
 	}
 
 	private UserProfileDto buildUserProfileDto(User user) {
 		return UserProfileDto.builder().email(user.getEmail()).name(user.getName()).phone(user.getPhone())
-				.block(user.getBlock()).imageURL(user.getAvatar()).regDate(user.getRegDate()).roles(user.getRoles())
+				.block(user.getBlock()).avatar(user.getAvatar()).regDate(user.getRegDate()).roles(user.getRoles())
 				.build();
 	}
 

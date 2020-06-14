@@ -15,7 +15,8 @@ import lombok.Singular;
 public class UserRegRespDto {
 	String email;
 	String name;
-	String imageURL;
+	String phone;
+	String avatar;
 	@Singular
 	Set<String> roles;
 

@@ -20,7 +20,7 @@ public class UserProfileDto {
 	String name;
 	String email;
 	String phone;
-	String imageURL;
+	String avatar;
 	Boolean block;
 	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	LocalDateTime regDate;
