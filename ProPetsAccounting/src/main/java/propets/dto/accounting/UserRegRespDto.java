@@ -1,9 +1,6 @@
-package propets.dto.accouting;
+package propets.dto.accounting;
 
-import java.time.LocalDateTime;
 import java.util.Set;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -15,15 +12,11 @@ import lombok.Singular;
 @AllArgsConstructor
 @Getter
 @Builder
-
-public class UserProfileDto {
-	String name;
+public class UserRegRespDto {
 	String email;
+	String name;
 	String phone;
 	String avatar;
-	Boolean block;
-	@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-	LocalDateTime regDate;
 	@Singular
 	Set<String> roles;
 

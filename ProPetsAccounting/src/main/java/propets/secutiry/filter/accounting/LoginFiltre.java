@@ -1,4 +1,4 @@
-package propets.secutiry.filter.accouting;
+package propets.secutiry.filter.accounting;
 
 import java.io.IOException;
 import java.security.Principal;
@@ -17,10 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import propets.configuration.accouting.AccountConfiguration;
-import propets.configuration.accouting.UserAccountCredentials;
-import propets.dao.accouting.UserAccountRepository;
-import propets.model.accouting.User;
+import propets.configuration.accounting.AccountConfiguration;
+import propets.configuration.accounting.UserAccountCredentials;
+import propets.dao.accounting.UserAccountRepository;
+import propets.model.accounting.User;
 @Service
 @Order(15)
 public class LoginFiltre implements Filter {

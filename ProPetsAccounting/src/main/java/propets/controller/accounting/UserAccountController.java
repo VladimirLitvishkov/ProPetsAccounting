@@ -1,4 +1,4 @@
-package propets.controller.accouting;
+package propets.controller.accounting;
 
 import java.security.Principal;
 import java.util.HashMap;
@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import propets.dto.accouting.UserBlockDto;
-import propets.dto.accouting.UserEditDto;
-import propets.dto.accouting.UserProfileDto;
-import propets.dto.accouting.UserRegRespDto;
-import propets.dto.accouting.UserRegisterDto;
-import propets.service.accouting.UserAccountService;
+import propets.dto.accounting.UserBlockDto;
+import propets.dto.accounting.UserEditDto;
+import propets.dto.accounting.UserProfileDto;
+import propets.dto.accounting.UserRegRespDto;
+import propets.dto.accounting.UserRegisterDto;
+import propets.service.accounting.UserAccountService;
 
 @RestController
 @RequestMapping("/{lang}/v1")

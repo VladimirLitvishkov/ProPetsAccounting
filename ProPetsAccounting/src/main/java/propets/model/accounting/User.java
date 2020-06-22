@@ -1,4 +1,4 @@
-package propets.model.accouting;
+package propets.model.accounting;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;

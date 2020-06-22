@@ -1,15 +1,15 @@
-package propets.service.accouting;
+package propets.service.accounting;
 
 import java.util.HashMap;
 import java.util.Set;
 
 import org.springframework.http.ResponseEntity;
 
-import propets.dto.accouting.UserBlockDto;
-import propets.dto.accouting.UserEditDto;
-import propets.dto.accouting.UserProfileDto;
-import propets.dto.accouting.UserRegRespDto;
-import propets.dto.accouting.UserRegisterDto;
+import propets.dto.accounting.UserBlockDto;
+import propets.dto.accounting.UserEditDto;
+import propets.dto.accounting.UserProfileDto;
+import propets.dto.accounting.UserRegRespDto;
+import propets.dto.accounting.UserRegisterDto;
 
 public interface UserAccountService {
 

@@ -1,4 +1,4 @@
-package propets.secutiry.filter.accouting;
+package propets.secutiry.filter.accounting;
 
 import java.io.IOException;
 
@@ -14,8 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
-import propets.dao.accouting.UserAccountRepository;
-import propets.model.accouting.User;
+import propets.dao.accounting.UserAccountRepository;
+import propets.model.accounting.User;
 
 @Service
 @Order(20)

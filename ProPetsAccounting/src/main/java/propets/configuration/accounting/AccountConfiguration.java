@@ -1,4 +1,4 @@
-package propets.configuration.accouting;
+package propets.configuration.accounting;
 
 import java.util.Base64;
 
@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 
 import lombok.Getter;
 import lombok.Setter;
-import propets.exceptions.accouting.UserAuthenticationException;
+import propets.exceptions.accounting.UserAuthenticationException;
 
 @Configuration
 @RefreshScope
@@ -24,6 +24,18 @@ public class AccountConfiguration {
 	
 	@Value("${requestToken}")
 	String requestToken;
+	
+	@Value("${urlToLostFoundEdit}")
+	String urlToLostFoundEdit;
+	
+	@Value("${messageService}")
+	String messageService;
+	
+	@Value("${lostFoundService}")
+	String lostFoundService;
+	
+	@Value("${urlToMessageEdit}")
+	String urlToMessageEdit;
 
 	public UserAccountCredentials tokenDecode(String token) {
 		try {

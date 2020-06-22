@@ -1,6 +1,8 @@
-package propets.service.accouting;
+package propets.service.accounting;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.ZonedDateTime;
 import java.util.Date;
 import java.util.HashMap;
@@ -9,24 +11,28 @@ import java.util.Set;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import propets.configuration.accouting.AccountConfiguration;
-import propets.dao.accouting.UserAccountRepository;
-import propets.dto.accouting.UserBlockDto;
-import propets.dto.accouting.UserEditDto;
-import propets.dto.accouting.UserProfileDto;
-import propets.dto.accouting.UserRegRespDto;
-import propets.dto.accouting.UserRegisterDto;
-import propets.exceptions.accouting.UserNotFoundException;
-import propets.exceptions.accouting.WrongLoginException;
-import propets.model.accouting.User;
+import propets.configuration.accounting.AccountConfiguration;
+import propets.dao.accounting.UserAccountRepository;
+import propets.dto.accounting.UserBlockDto;
+import propets.dto.accounting.UserDataToPostDto;
+import propets.dto.accounting.UserEditDto;
+import propets.dto.accounting.UserProfileDto;
+import propets.dto.accounting.UserRegRespDto;
+import propets.dto.accounting.UserRegisterDto;
+import propets.exceptions.accounting.UserNotFoundException;
+import propets.exceptions.accounting.WrongLoginException;
+import propets.model.accounting.User;
 
 @Service
 public class UserAccountServiceImpl implements UserAccountService {
@@ -105,6 +111,28 @@ public class UserAccountServiceImpl implements UserAccountService {
 			user.setAvatar(userEditDto.getImageURL());
 		}
 		userAccountRepository.save(user);
+//		need Kafka
+		RestTemplate restTemplate = new RestTemplate();
+		URI urlToEdit = null;
+		UserDataToPostDto authorEditDto = UserDataToPostDto.builder().userName(user.getName()).avatar(user.getAvatar()).build();
+		for (String serviceName : user.getActivities().keySet()) {
+			String urlToService = null;
+			if (serviceName.equalsIgnoreCase(configuration.getLostFoundService())) {
+				urlToService = configuration.getUrlToLostFoundEdit();
+			} else if (serviceName.equalsIgnoreCase(configuration.getMessageService())) {
+				urlToService = configuration.getUrlToMessageEdit();
+			}
+			for (String idPost : user.getActivities().get(serviceName)) {
+				try {
+					urlToEdit = new URI(urlToService+idPost);
+				} catch (URISyntaxException e) {
+					e.printStackTrace();
+				}
+				RequestEntity<UserDataToPostDto> request = new RequestEntity<>(authorEditDto, HttpMethod.DELETE, urlToEdit);
+				restTemplate.exchange(request, UserDataToPostDto.class);
+			}
+		}
+		
 		return buildUserProfileDto(user);
 	}
 

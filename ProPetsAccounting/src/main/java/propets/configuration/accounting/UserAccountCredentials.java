@@ -1,4 +1,4 @@
-package propets.configuration.accouting;
+package propets.configuration.accounting;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

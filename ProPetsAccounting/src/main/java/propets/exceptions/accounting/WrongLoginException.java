@@ -1,4 +1,4 @@
-package propets.exceptions.accouting;
+package propets.exceptions.accounting;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

@@ -1,4 +1,4 @@
-package propets.dto.accouting;
+package propets.dto.accounting;
 
 import lombok.Getter;
 

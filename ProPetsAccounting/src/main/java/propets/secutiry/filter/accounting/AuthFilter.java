@@ -1,4 +1,4 @@
-package propets.secutiry.filter.accouting;
+package propets.secutiry.filter.accounting;
 
 import java.io.IOException;
 import java.security.Principal;
@@ -18,9 +18,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import propets.configuration.accouting.AccountConfiguration;
-import propets.dao.accouting.UserAccountRepository;
-import propets.service.accouting.UserAccountService;
+import propets.configuration.accounting.AccountConfiguration;
+import propets.dao.accounting.UserAccountRepository;
+import propets.service.accounting.UserAccountService;
 
 @Service
 @Order(10)

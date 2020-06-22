@@ -1,8 +1,8 @@
-package propets.dao.accouting;
+package propets.dao.accounting;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import propets.model.accouting.User;
+import propets.model.accounting.User;
 
 public interface UserAccountRepository extends MongoRepository<User, String> {
 

@@ -6,8 +6,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-import propets.dao.accouting.UserAccountRepository;
-import propets.model.accouting.User;
+import propets.dao.accounting.UserAccountRepository;
+import propets.model.accounting.User;
 
 @SpringBootApplication
 public class ProPetsAccountingApplication implements CommandLineRunner {
